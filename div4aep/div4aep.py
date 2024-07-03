@@ -27,12 +27,14 @@ def check_config(config):
         if key not in config:
             config[key] = value
             logger.info(f'Key {repr(key)} missing in config, using default {repr(value)}.')
+    del key, value
     
     # unknown keys
     keys = config.keys() - DEFAULT_CONFIG.keys()
     if len(keys) > 0:
         keys_str = ', '.join([repr(k) for k in keys])
         logger.warning(f'Unknown keys in config: {keys_str}.')
+    del keys
 
 
 def main():
