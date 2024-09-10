@@ -25,7 +25,8 @@ DEFAULT_CONFIG = {
     'boundary_filter': '[type=boundary][boundary=administrative]',
     'initial_admin_level': 2,
     'max_admin_level': 6,
-    'stop_at_coverage': 0.7,
+    'min_coverage': 0.7,
+    'good_coverage': 0.9,
     'out_path': 'patches.csv',
     'max_overhang': 0.1,
     'patches_map_path': '',
@@ -354,7 +355,7 @@ class Patch:
                 self.subpatches = subpatches
                 break
             coverage = 1 - self._relative_area(diff, self.shape, self.lat, self.lon)
-            if coverage >= config['stop_at_coverage']:
+            if coverage >= config['good_coverage']:
                 logger.info(f'Good coverage ({coverage}).')
                 self.coverage = coverage
                 self.subpatches = subpatches
@@ -368,9 +369,12 @@ class Patch:
             subpatches = []
 
         else:
-            logger.info(f'No more admin levels. Using best coverage result so far ({best_coverage}).')
-            self.coverage = best_coverage
-            self.subpatches = best_subpatches
+            if best_coverage and best_coverage >= config['min_coverage']:
+                logger.info(f'No more admin levels. Using best coverage result so far ({best_coverage}).')
+                self.coverage = best_coverage
+                self.subpatches = best_subpatches
+            else:
+                logger.info('No more admin levels. No subpatchess with sufficient coverage found.')
         
         logger.info(f'...finished splitting patch {self.name} (relation {self.osm_id}).')
     
