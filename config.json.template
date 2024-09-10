@@ -1,0 +1,18 @@
+{
+    "log_path": "div4aep.log",
+    "debug": false,
+    "overpass_url": "https://overpass-api.de/api/interpreter",
+    "overpass_key": "",
+    "overpass_timeout": 600,
+    "max_patch_diameter": 2000000,
+    "earth_radius": 6371000,
+    "bbox": [-90, -180, 90, 180],
+    "boundary_filter": "[type=boundary][boundary=administrative]",
+    "initial_admin_level": 2,
+    "max_admin_level": 6,
+    "stop_at_coverage": 0.7,
+    "out_path": "patches.csv",
+    "max_overhang": 0.1,
+    "patches_map_path": "patches.html",
+    "uncovered_map_path": "uncovered.html"
+}

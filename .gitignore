@@ -1,0 +1,4 @@
+config.json
+*.log
+*.html
+*.csv
