@@ -12,11 +12,8 @@ All patches together cover (almost) all of the earth's land mass.
 Based on `div4aep`'s data you may generate optimal azimuthal equispaced projections for each patch. Deviation of Euclidean distances in the projected maps from geodesic distances will be uniformly bounded with respect to all patches. For computation of the bound given maximum diameter (and vice verse) and for ready-to-use data sets produced by `div4aep` see [div4aep data sets](https://whz.de/~jef19jdw/codedata/div4aep.html).
 
 ## Installation
-Run
-```
-pip install div4aep
-```
-or copy `div4aep.py` from this repo to your working directory.
+
+Clone this repo or download `div4aep.py` and `config.json.template` from this repo.
 
 ## Usage
 
