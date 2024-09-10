@@ -538,7 +538,7 @@ def main():
         data={'osm_id': osm_ids, 'name': names, 'code': codes, 'admin_level': admin_levels,
               'parent_osm_id': leaf_parent_ids, 'lon': lons, 'lat': lats, 'radius': radiuses}
     )
-    patches.to_csv(config['out_path'])
+    patches.to_csv(config['out_path'], index=False)
     
     # make maps
     shapes = [p.shape for p in leaf_patches]
