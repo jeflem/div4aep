@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build" 
+
+[project]
+name = "div4aep"
+version = "0.1.0"
+dependencies = [
+  "geopandas",
+  "numpy",
+  "requests",
+  "secots",
+  "shapely"
+]
+authors = [
+  {name = "Jens Flemming", email = "jens.flemming@fh-zwickau.de"},
+]
+maintainers = [
+  {name = "Jens Flemming", email = "jens.flemming@fh-zwickau.de"},
+]
+description = "Divide the earth's land mass into patches with prescribed maximum diameter along administrative boundaries and get optimal parameters for azimuthal equispaced projections."
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["azimuthal equispaced projection", "administration boundaries", "regions"]
+
+[project.urls]
+Documentation = "https://github.com/jeflem/div4aep/blob/main/README.md"
+Repository = "https://github.com/jeflem/div4aep.git"
+Issues = "https://github.com/jeflem/div4aep/issues"
+Changelog = "https://github.com/jeflem/div4aep/blob/master/CHANGELOG.md"
