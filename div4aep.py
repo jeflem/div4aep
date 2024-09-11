@@ -506,17 +506,18 @@ def main():
     global root_patch
     root_patch = Patch.from_subpatches_data(nodes, ways, rels)
 
-    # get leaf patches
-    leaf_patches = []
-    leaf_parent_ids = []
-    patches = [(0, p) for p in root_patch.subpatches]
-    while len(patches) > 0:
-        parent_id, patch = patches.pop()
-        if patch.subpatches:
-            patches.extend([(patch.osm_id, p) for p in patch.subpatches])
-        else:
-            leaf_patches.append(patch)
-            leaf_parent_ids.append(parent_id)
+    # get patches and leaf shapes
+    leaf_shapes = []
+    patches = []
+    parent_ids = []
+    unprocessed = [(0, p) for p in root_patch.subpatches]
+    while len(unprocessed) > 0:
+        parent_id, patch = unprocessed.pop()
+        patches.append(patch)
+        parent_ids.append(parent_id)
+        unprocessed.extend([(patch.osm_id, p) for p in patch.subpatches])
+        if len(patch.subpatches) == 0:
+            leaf_shapes.append(patch.shape)
     
     # write CSV file
     names = []
@@ -526,7 +527,7 @@ def main():
     lons = []
     lats = []
     radiuses = []
-    for patch in leaf_patches:
+    for patch in patches:
         names.append(patch.name)
         codes.append(patch.code)
         osm_ids.append(patch.osm_id)
@@ -536,18 +537,17 @@ def main():
         radiuses.append(patch.radius)
     patches = gpd.pd.DataFrame(
         data={'osm_id': osm_ids, 'name': names, 'code': codes, 'admin_level': admin_levels,
-              'parent_osm_id': leaf_parent_ids, 'lon': lons, 'lat': lats, 'radius': radiuses}
+              'parent_osm_id': parent_ids, 'lon': lons, 'lat': lats, 'radius': radiuses}
     )
     patches.to_csv(config['out_path'], index=False)
     
     # make maps
-    shapes = [p.shape for p in leaf_patches]
-    all_patches_shape = shapely.unary_union(shapes)
+    all_patches_shape = shapely.unary_union(leaf_shapes)
     diff = root_patch.shape - all_patches_shape
     if config['uncovered_map_path']:
         gpd.GeoSeries(diff, crs=LON_LAT_CRS).explore().save(config['uncovered_map_path'])
     if config['patches_map_path']:
-        gpd.GeoSeries(shapes, crs=LON_LAT_CRS).explore().save(config['patches_map_path'])    
+        gpd.GeoSeries(leaf_shapes, crs=LON_LAT_CRS).explore().save(config['patches_map_path'])    
 
 
 if __name__ == '__main__':
