@@ -334,7 +334,11 @@ class Patch:
                 #if not shapely.contains(self.shape, subshape):
                     logger.debug(f'Ignoring relation {r.id}, because it\'s not contained in parent.')
                     continue
-                subpatches.append(Patch(r, nodes_dict, ways_dict))
+                subpatch = Patch(r, nodes_dict, ways_dict)
+                if not subpatch.name:
+                    logger.debug(f'Ignoring relation {r.id}, because patch creation failed.')
+                    continue
+                subpatches.append(subpatch)
             logger.info(f'There\'re {len(subpatches)} subpatches at admin_level {admin_level}.')
             if len(subpatches) == 0:
                 continue
