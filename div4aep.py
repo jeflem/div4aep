@@ -136,7 +136,7 @@ class Patch:
                 polys.append(Polygon(line))
             shape = shapely.unary_union(polys)
         else:
-            logger.error('Merging ways resulted in {type(outline)}, which is not supported!')
+            logger.error(f'Merging ways resulted in {type(outline)}, which is not supported!')
             shape = None
         return shape
     
@@ -148,9 +148,15 @@ class Patch:
         inner_ways = []
         for m in r.members:
             if m.role == 'outer' and m.type == 'way':
-                outer_ways.append(ways_dict[m.id])
+                outer_ways.append(ways_dict.get(m.id, None))
+                if not outer_ways[-1]:
+                    logger.error(f'Relation {r.id} contains non-existing way {m.id}!')
+                    return None
             elif m.role == 'inner' and m.type == 'way':
-                inner_ways.append(ways_dict[m.id])
+                inner_ways.append(ways_dict.get(m.id, None))
+                if not inner_ways[-1]:
+                    logger.error(f'Relation {r.id} contains non-existing way {m.id}!')
+                    return None
     
         # make shapes from way groups
         if outer_ways:
@@ -158,7 +164,7 @@ class Patch:
             if not outer_shape:
                 return None
         else:
-            logger.error('Relation {r.id} has no outer ways!')
+            logger.error(f'Relation {r.id} has no outer ways!')
             return None
         if not inner_ways:
             return outer_shape
