@@ -424,7 +424,7 @@ def overpass(query, ids_only=False):
     response = requests.post(
         config['overpass_url'],
         data={'data': preamble + query},
-        headers={'X-API-Key': config['overpass_key']}
+        headers={'X-API-Key': config['overpass_key'], 'User-Agent': 'Python'}
     )
     if response.status_code != 200:
         logger.error(
